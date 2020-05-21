@@ -21,7 +21,7 @@ python3 cartpole.py
 ```
 
 You will need to install support libraries prior to running. Our demos depend on `bonsai3-py`.
-This library will need to be installed from source.
+This library will need to be installed from source. The cartpole-py repository should be in a folder called `samples` at the same level as `bonsai3-py`.
 
 ```sh
 pip3 install -e ./bonsai3-py
