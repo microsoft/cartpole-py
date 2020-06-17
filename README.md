@@ -29,10 +29,12 @@ You can clone `microsoft-bonsai-api` directly [here](https://github.com/BonsaiAI
 `sim-common` can be cloned directly [here](https://github.com/BonsaiAI/sim-common/tree/master)
 
 ```sh
-pip3 install -e ./bonsai3-py
+pip3 install -e ./microsoft-bonsai-api
+pip3 install -e ./sim-common
 ```
 
 ## Building Demo Dockerfile
+The following instructions are assuming you are using the bonsai-sdk repo to try out the sample. It will not work without it as it installs the dependencies from that repo.
 ```sh
 docker build -t <IMAGE_NAME> -f Dockerfile ../../
 ```
