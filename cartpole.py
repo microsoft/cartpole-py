@@ -11,12 +11,14 @@ import math
 import os
 import random
 import sys
+import json
+from typing import Dict, Any
 
-from bonsai3 import ServiceConfig, SimulatorInterface, SimulatorSession
-from bonsai3.logger import Logger
-from bonsai3.simulator_protocol import Schema
 
-log = Logger()
+from sim_common import SimulatorSession
+from microsoft_bonsai_api.client import BonsaiClientConfig
+from microsoft_bonsai_api.simulator.models import SimulatorInterface
+
 
 # Constants
 GRAVITY = 9.8  # a classic...
@@ -100,8 +102,8 @@ class CartPoleModel(SimulatorSession):
         )
 
     def halted(self):
-        # If the pole has fallen, there's no use in continuing.
-        return abs(self._pole_angle) >= math.pi / 2
+        # If the pole has fallen past 45 degrees, there's no use in continuing.
+        return abs(self._pole_angle) >= math.pi / 4
 
     def state(self):
         return {
@@ -122,21 +124,29 @@ class CartPoleModel(SimulatorSession):
         interface_file_path = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "cartpole_interface.json"
         )
-        return SimulatorInterface(self.get_simulator_context(), interface_file_path)
+        with open(interface_file_path, "r") as file:
+            json_interface = file.read()
+        interface = json.loads(json_interface)
+        return SimulatorInterface(
+            name=interface["name"],
+            timeout=interface["timeout"],
+            simulator_context=self.get_simulator_context(),
+            description=interface["description"],
+        )
 
-    def episode_start(self, config: Schema):
+    def episode_start(self, config: Dict[str, Any]):
         self.reset(
             config.get("initial_cart_position") or 0,
             config.get("initial_pole_angle") or 0,
             config.get("target_pole_position") or 0,
         )
 
-    def episode_step(self, action: Schema):
+    def episode_step(self, action: Dict[str, Any]):
         self.step(action.get("command") or 0)
 
 
 if __name__ == "__main__":
-    config = ServiceConfig(argv=sys.argv)
+    config = BonsaiClientConfig(argv=sys.argv)
     cartpole = CartPoleModel(config)
     cartpole.reset()
     while cartpole.run():

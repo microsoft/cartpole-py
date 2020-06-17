@@ -20,10 +20,13 @@ export SIM_ACCESS_KEY=<your-access-key>
 python3 cartpole.py
 ```
 
-You will need to install support libraries prior to running. Our demos depend on `bonsai3-py`.
-This library will need to be installed from source. The cartpole-py repository should be in a folder called `samples` at the same level as `bonsai3-py`.
+You will need to install support libraries prior to running. Our demos depend on `microsoft-bonsai-api` and some shared code in `sim-common`.
 
-You can also clone `bonsai3-py` directly [here](https://github.com/BonsaiAI/bonsai3-py).
+These libraries will need to be installed from source. The cartpole-py repository should be in a folder called `samples` at the same level as `bonsai3-py`.
+
+You can clone `microsoft-bonsai-api` directly [here](https://github.com/BonsaiAI/bonsai-api).
+
+`sim-common` can be cloned directly [here](https://github.com/BonsaiAI/sim-common/tree/master)
 
 ```sh
 pip3 install -e ./bonsai3-py
