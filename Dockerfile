@@ -10,19 +10,19 @@ RUN apt-get update && \
 COPY pip.conf /root/.pip/pip.conf
 
 # Install SDK3 Python
-COPY bonsai3-py ./bonsai3-py
-RUN pip3 install -U setuptools \
-  && cd bonsai3-py \
-  && python3 setup.py develop \
-  && pip3 uninstall -y setuptools
+RUN pip3 install -U setuptools
 
 # Set up the simulator
-WORKDIR /sim
+WORKDIR /src
 
 # Copy simulator files to /sim
-COPY samples/cartpole-py /sim
+COPY . /src
 
+# Install wheel files for msft bonsai api
+RUN pip3 install microsoft_bonsai_api-0.1-py3-none-any.whl
+
+# Install dependencies
 RUN pip3 install -r requirements.txt
 
 # This will be the command to run the simulator
-CMD ["python", "cartpole.py", "--verbose"]
+CMD ["python", "__main__.py"]

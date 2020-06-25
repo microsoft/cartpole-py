@@ -14,24 +14,29 @@ There is also an optional `SIM_API_HOST` key, but if it is not set it will defau
 If you're launching your simulator from the command line, make sure that you have these two
 environment variables set. If you like, you could use the following example script:
 
+Linux:
 ```sh
 export SIM_WORKSPACE=<your-workspace-id>
 export SIM_ACCESS_KEY=<your-access-key>
-python3 cartpole.py
+python3 __main__.py
 ```
 
-You will need to install support libraries prior to running. Our demos depend on `bonsai3-py`.
-This library will need to be installed from source. The cartpole-py repository should be in a folder called `samples` at the same level as `bonsai3-py`.
+Windows:
+```cmd
+set SIM_WORKSPACE=<your-workspace-id>
+set SIM_ACCESS_KEY=<your-access-key>
+python3 __main__.py
+```
 
-You can also clone `bonsai3-py` directly [here](https://github.com/BonsaiAI/bonsai3-py).
+You will need to install support libraries prior to running. Our demos depend on `microsoft-bonsai-api`.
 
 ```sh
-pip3 install -e ./bonsai3-py
+pip3 install microsoft_bonsai_api-0.1-py3-none-any.whl
 ```
 
 ## Building Demo Dockerfile
 ```sh
-docker build -t <IMAGE_NAME> -f Dockerfile ../../
+docker build -t <IMAGE_NAME> .
 ```
 
 ## Run Dockerfile local
@@ -49,13 +54,13 @@ docker push <ACR_REGSITRY_NAME>.azurecr.io/bonsai/cartpole
 
 ## Example run Dockerfile
 ```sh
-docker build -t cartpole -f Dockerfile ../../
+docker build -t cartpole .
 docker run --rm -it -e SIM_ACCESS_KEY="111" -e SIM_API_HOST="https://api.bons.ai" -e SIM_WORKSPACE="123"
 ```
 
 ## Example push to ACR(Assuming you logged in)
 ```sh
-docker build -t cartpole -f Dockerfile ../../
+docker build -t cartpole .
 docker tag cartpole bonsaisimpreprod.azurecr.io/bonsai/cartpole
 docker push bonsaisimpreprod.azurecr.io/bonsai/cartpole
 ```

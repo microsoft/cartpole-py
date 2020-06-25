@@ -12,22 +12,19 @@ const TrackLength = 0.5
 # Maximum angle of pole in radians before it has fallen
 const MaxPoleAngle = (12 * Math.Pi) / 180
 
-# Velocity measured in m/s
-const MaxVelocity = 1.0
-
 # Type that represents the per-iteration state returned by simulator
 type SimState {
     # Position of cart in meters
-    cart_position: number<-TrackLength / 2 .. TrackLength / 2>,
+    cart_position: number,
 
     # Velocity of cart in meters/sec
-    cart_velocity: number<-MaxVelocity .. MaxVelocity>,
+    cart_velocity: number,
 
     # Current angle of pole in radians
-    pole_angle: number<-Math.Pi .. Math.Pi>,
+    pole_angle: number,
 
     # Angular velocity of the pole in radians/sec
-    pole_angular_velocity: number<-Math.Pi / 2 .. Math.Pi / 2>,
+    pole_angular_velocity: number,
 }
 
 # Type that represents the per-iteration action accepted by the simulator
