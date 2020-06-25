@@ -112,7 +112,7 @@ if __name__ == "__main__":
                 sim.episode_step(event.episode_step.action)
             elif event.type == 'EpisodeFinish':
                 print('Episode Finishing...')
-            elif event.type == 'unregister':
+            elif event.type == 'Unregister':
                 client.session.delete(
                     workspace_name=config_client.workspace, 
                     session_id=registered_session.session_id
