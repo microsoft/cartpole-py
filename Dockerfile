@@ -25,4 +25,4 @@ RUN pip3 install microsoft_bonsai_api-0.1-py3-none-any.whl
 RUN pip3 install -r requirements.txt
 
 # This will be the command to run the simulator
-CMD ["python", "__main__.py"]
+CMD ["python", "carptole.py"]
