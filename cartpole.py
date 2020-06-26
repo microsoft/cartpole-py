@@ -143,9 +143,18 @@ if __name__ == '__main__':
         while True:
             # Advance by the new state depending on the event type
             sim_state = SimulatorState(
-                            session_id=registered_session.session_id,
-                            sequence_id=sequence_id, state=sim.get_state(), 
-                            halted=sim.halted()
+                session_id=registered_session.session_id,
+                sequence_id=sequence_id, 
+                state={
+                    "cart_position": sim._cart_position,
+                    "cart_velocity": sim._cart_velocity,
+                    "pole_angle": sim._pole_angle,
+                    "pole_angular_velocity": sim._pole_angular_velocity,
+                    "pole_center_position": sim._pole_center_position,
+                    "pole_center_velocity": sim._pole_center_velocity,
+                    "target_pole_position": sim._target_pole_position,
+                    }, 
+                halted=abs(sim._pole_angle) >= math.pi / 4
             )
             event = client.session.advance(
                         workspace_name=config_client.workspace, 
