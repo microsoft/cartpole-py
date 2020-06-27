@@ -33,13 +33,21 @@ type SimAction {
     command: number<-1 .. 1>
 }
 
+# Type representing the per-episode configuration variables accepted by the sim
+type SimConfig {
+    initial_cart_position: number,
+    initial_pole_angle: number,
+    target_pole_position: number,
+}
+
 # Define a concept graph with a single concept
 graph (input: SimState): SimAction {
     concept BalancePole(input): SimAction {
         curriculum {
             # The source of training for this concept is a simulator
-            # that takes an action as an input and outputs a state.
-            source simulator (Action: SimAction): SimState {
+            #  - takes an action as an input and outputs a state.
+            #  - can be configured for each episode using fields defined in SimConfig
+            source simulator (Action: SimAction, Config: SimConfig): SimState {
             }
 
             # The objective of training is expressed as a goal with two
@@ -56,6 +64,16 @@ graph (input: SimState): SimAction {
                 # Limit the number of iterations per episode to 120. The default
                 # is 1000, which makes it much tougher to succeed.
                 EpisodeIterationLimit: 120
+            }
+
+            lesson `Randomize Start` {
+                # Specify the configuration parameters that should be varied
+                # from one episode to the next during this lesson.
+                scenario {
+                    initial_cart_position: number<-0.2 .. 0.2>,
+                    initial_pole_angle: number<-0.01 .. 0.01>,
+                    target_pole_position: 0,
+                }
             }
         }
     }

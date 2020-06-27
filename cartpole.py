@@ -139,61 +139,50 @@ if __name__ == '__main__':
     print("Registered simulator.")
     sequence_id = 1
 
-    try:
-        while True:
-            # Advance by the new state depending on the event type
-            sim_state = SimulatorState(
-                session_id=registered_session.session_id,
-                sequence_id=sequence_id, 
-                state={
-                    "cart_position": sim._cart_position,
-                    "cart_velocity": sim._cart_velocity,
-                    "pole_angle": sim._pole_angle,
-                    "pole_angular_velocity": sim._pole_angular_velocity,
-                    "pole_center_position": sim._pole_center_position,
-                    "pole_center_velocity": sim._pole_center_velocity,
-                    "target_pole_position": sim._target_pole_position,
-                    }, 
-                halted=abs(sim._pole_angle) >= math.pi / 4
-            )
-            event = client.session.advance(
-                        workspace_name=config_client.workspace, 
-                        session_id=registered_session.session_id, 
-                        body=sim_state
-            )
-            sequence_id = event.sequence_id
-            print("[{}] Last Event: {}".format(time.strftime('%H:%M:%S'), 
-                                               event.type))
-
-            # Event loop
-            if event.type == 'Idle':
-                time.sleep(event.idle.callback_time)
-                print('Idling...')
-            elif event.type == 'EpisodeStart':
-                sim.reset(event.episode_start.config)
-            elif event.type == 'EpisodeStep':
-                sim.step(event.episode_step.action)
-            elif event.type == 'EpisodeFinish':
-                print('Episode Finishing...')
-            elif event.type == 'Unregister':
-                client.session.delete(
+    while True:
+        # Advance by the new state depending on the event type
+        sim_state = SimulatorState(
+            session_id=registered_session.session_id,
+            sequence_id=sequence_id, 
+            state={
+                "cart_position": sim._cart_position,
+                "cart_velocity": sim._cart_velocity,
+                "pole_angle": sim._pole_angle,
+                "pole_angular_velocity": sim._pole_angular_velocity,
+                "pole_center_position": sim._pole_center_position,
+                "pole_center_velocity": sim._pole_center_velocity,
+                "target_pole_position": sim._target_pole_position,
+                }, 
+            halted=abs(sim._pole_angle) >= math.pi / 4
+        )
+        event = client.session.advance(
                     workspace_name=config_client.workspace, 
-                    session_id=registered_session.session_id
-                )
-                print("Unregistered simulator.")
-            else:
-                pass
-    except KeyboardInterrupt:
-        # Gracefully unregister with keyboard interrupt
-        client.session.delete(
-            workspace_name=config_client.workspace, 
-            session_id=registered_session.session_id
+                    session_id=registered_session.session_id, 
+                    body=sim_state
         )
-        print("Unregistered simulator.")
-    except Exception as err:
-        # Gracefully unregister for any other exceptions
-        client.session.delete(
-            workspace_name=config_client.workspace, 
-            session_id=registered_session.session_id
-        )
-        print("Unregistered simulator because: {}".format(err))
+        sequence_id = event.sequence_id
+        print("[{}] Last Event: {}".format(time.strftime('%H:%M:%S'), 
+                                            event.type))
+
+        # Event loop
+        if event.type == 'Idle':
+            time.sleep(event.idle.callback_time)
+            print('Idling...')
+        elif event.type == 'EpisodeStart':
+            sim.reset(
+                event.episode_start.config['initial_cart_position'],
+                event.episode_start.config['initial_pole_angle'],
+                event.episode_start.config['target_pole_position']
+            )
+        elif event.type == 'EpisodeStep':
+            sim.step(event.episode_step.action['command'])
+        elif event.type == 'EpisodeFinish':
+            print('Episode Finishing...')
+        elif event.type == 'Unregister':
+            client.session.delete(
+                workspace_name=config_client.workspace, 
+                session_id=registered_session.session_id
+            )
+            print("Unregistered simulator.")
+        else:
+            pass
