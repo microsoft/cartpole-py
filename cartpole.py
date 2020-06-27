@@ -115,7 +115,7 @@ if __name__ == '__main__':
 
     from cartpole import CartPoleModel
 
-    # Use simulator API
+    # Create entry point to simulator API
     sim = CartPoleModel()
 
     # Configure client to interact with Bonsai service
