@@ -1,6 +1,3 @@
-# This sample demonstrates how to teach a policy for controlling
-# a cartpole (inverted pendulum) device.
-
 inkling "2.0"
 
 using Math
@@ -12,47 +9,57 @@ const TrackLength = 0.5
 # Maximum angle of pole in radians before it has fallen
 const MaxPoleAngle = (12 * Math.Pi) / 180
 
-# Type that represents the per-iteration state returned by simulator
+# Define a type that represents the per-iteration state
+# returned by the simulator.
 type SimState {
     # Position of cart in meters
     cart_position: number,
-
-    # Velocity of cart in meters/sec
+    # Velocity of cart in x direction in meters/sec
     cart_velocity: number,
-
     # Current angle of pole in radians
     pole_angle: number,
-
-    # Angular velocity of the pole in radians/sec
+    # Angular velocity of pole in radians/sec
     pole_angular_velocity: number,
-}
-
-# Type that represents the per-iteration action accepted by the simulator
-type SimAction {
-    # Amount of force in x direction to apply to the cart.
-    command: number<-1 .. 1>
-}
-
-# Type representing the per-episode configuration variables accepted by the sim
-type SimConfig {
-    initial_cart_position: number,
-    initial_pole_angle: number,
+    # Pole position in meters
+    pole_center_position: number,
+    # Pole velocity in meters/sec
+    pole_center_velocity: number,
+    # Target pole position in meters
     target_pole_position: number,
 }
 
-# Define a concept graph with a single concept
+# Define a type that represents the per-iteration action
+# accepted by the simulator.
+type SimAction {
+    command: number<-1 .. 1>,
+}
+
+# Per-episode configuration that can be sent to the simulator.
+# All iterations within an episode will use the same configuration.
+type SimConfig {
+    # Starting position of cart in meters
+    initial_cart_position: number,
+    # Starting angle of pole in radians
+    initial_pole_angle: number,
+    # Target position of pole in meters
+    target_pole_position: number,
+}
+
+simulator Simulator(action: SimAction, config: SimConfig): SimState {
+}
+
+# Define a concept graph
 graph (input: SimState): SimAction {
-    concept BalancePole(input): SimAction {
+    concept Concept1(input): SimAction {
+
         curriculum {
             # The source of training for this concept is a simulator
-            #  - takes an action as an input and outputs a state.
-            #  - can be configured for each episode using fields defined in SimConfig
-            source simulator (Action: SimAction, Config: SimConfig): SimState {
-            }
-
-            # The objective of training is expressed as a goal with two
-            # subgoals: don't let the pole fall over, and don't move
-            # the cart off the track.
+            # that takes an action as an input and outputs a state.
+            source Simulator
+            
+            # Add goals here describing what you want to teach the brain
+            # See the Inkling documentation for goals syntax
+            # https://docs.microsoft.com/bonsai/inkling/keywords/goal
             goal (State: SimState) {
                 avoid `Fall Over`:
                     Math.Abs(State.pole_angle) in Goal.RangeAbove(MaxPoleAngle)

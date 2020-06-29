@@ -95,11 +95,9 @@ class CartPoleModel():
 if __name__ == '__main__':
     """Usage:
     For registering simulator with the Bonsai service for training:
-        python cartpole.py --api-host https://api.bons.ai \
-            --workspace <workspace_id> \
-            --accesskey="<access_key> \
+        python cartpole.py
     Then connect your registered simulator to a Brain via UI.
-    Alternatively, one can set the SIM_ACCESS_KEY and SIM_WORSKPACE as
+    Remeember to set the SIM_ACCESS_KEY and SIM_WORSKPACE as
     environment variables.
     """
     import os
@@ -131,6 +129,7 @@ if __name__ == '__main__':
                             name=interface['name'], 
                             timeout=interface['timeout'], 
                             simulator_context=config_client.simulator_context, 
+                            description=interface['description']
     )
     registered_session = client.session.create(
                             workspace_name=config_client.workspace, 
@@ -177,12 +176,14 @@ if __name__ == '__main__':
         elif event.type == 'EpisodeStep':
             sim.step(event.episode_step.action['command'])
         elif event.type == 'EpisodeFinish':
-            print('Episode Finishing...')
+            print('Episode Finishing...Reason: {}'.format(
+                  event.episode_finish.reason))
         elif event.type == 'Unregister':
             client.session.delete(
                 workspace_name=config_client.workspace, 
                 session_id=registered_session.session_id
             )
             print("Unregistered simulator.")
+            break
         else:
             pass
