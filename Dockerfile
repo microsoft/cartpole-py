@@ -4,22 +4,22 @@ FROM python:3.7.4
 # Install libraries and dependencies
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
-    build-essential \
-    cmake \
-    zlib1g-dev \
-    swig
+  && rm -rf /var/lib/apt/lists/*
+
+# Install SDK3 Python
+RUN pip3 install -U setuptools
 
 # Set up the simulator
 WORKDIR /src
 
-# Copy simulator files to /src
+# Copy simulator files to /sim
 COPY . /src
 
-RUN pip3 install bonsai3-1.0.0-py2.py3-none-any.whl \
-    bonsai_cli-1.0.0-py2.py3-none-any.whl
+# Install wheel files for msft bonsai api
+RUN pip3 install microsoft_bonsai_api-0.1-py3-none-any.whl
 
-# Install simulator dependencies
+# Install dependencies
 RUN pip3 install -r requirements.txt
 
-# # This will be the command to run the simulator
-CMD ["python", "__main__.py"]
+# This will be the command to run the simulator
+CMD ["python", "cartpole.py"]
