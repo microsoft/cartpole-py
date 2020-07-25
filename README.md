@@ -31,7 +31,7 @@ python3 __main__.py
 You will need to install support libraries prior to running. Our demos depend on `microsoft-bonsai-api`.
 
 ```sh
-pip3 install microsoft_bonsai_api-0.1-py3-none-any.whl
+pip3 install -U microsoft-bonsai-api
 ```
 
 ## Building Demo Dockerfile
