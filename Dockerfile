@@ -15,8 +15,6 @@ WORKDIR /src
 # Copy simulator files to /src
 COPY . /src
 
-RUN pip3 install microsoft-bonsai-api bonsai-cli
-
 # Install simulator dependencies
 RUN pip3 install -r requirements.txt
 

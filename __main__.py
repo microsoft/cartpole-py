@@ -90,7 +90,6 @@ if __name__ == "__main__":
         while True:
             # Advance by the new state depending on the event type
             sim_state = SimulatorState(
-                            session_id=registered_session.session_id,
                             sequence_id=sequence_id, state=sim.get_state(), 
                             halted=sim.halted()
             )
