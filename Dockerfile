@@ -15,9 +15,6 @@ WORKDIR /src
 # Copy simulator files to /sim
 COPY . /src
 
-# Install wheel files for msft bonsai api
-RUN pip3 install microsoft-bonsai-api
-
 # Install dependencies
 RUN pip3 install -r requirements.txt
 

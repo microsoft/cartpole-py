@@ -141,7 +141,6 @@ if __name__ == '__main__':
     while True:
         # Advance by the new state depending on the event type
         sim_state = SimulatorState(
-            session_id=registered_session.session_id,
             sequence_id=sequence_id, 
             state={
                 "cart_position": sim._cart_position,
