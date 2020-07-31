@@ -1,2 +1,2 @@
-microsoft-bonsai-api>=0.1
+microsoft-bonsai-api>=0.1.0
 bonsai-cli>=1.0.0
