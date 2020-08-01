@@ -105,8 +105,11 @@ if __name__ == '__main__':
     import json
     import time
     from typing import Dict, Any, Optional
-    from microsoft_bonsai_api.client import BonsaiClientConfig, BonsaiClient
-    from microsoft_bonsai_api.simulator.models import (
+    from microsoft_bonsai_api.simulator.client import (
+        BonsaiClientConfig,
+        BonsaiClient
+    )
+    from microsoft_bonsai_api.simulator.generated.models import (
         SimulatorState,
         SimulatorInterface,
     )
