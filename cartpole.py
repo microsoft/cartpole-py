@@ -11,12 +11,13 @@ import math
 import os
 import random
 import sys
+import json
 
-from bonsai3 import ServiceConfig, SimulatorInterface, SimulatorSession
-from bonsai3.logger import Logger
-from bonsai3.simulator_protocol import Schema
 
-log = Logger()
+from bonsai_common import SimulatorSession, Schema
+from microsoft_bonsai_api.simulator.client import BonsaiClientConfig
+from microsoft_bonsai_api.simulator.generated.models import SimulatorInterface
+
 
 # Constants
 GRAVITY = 9.8  # a classic...
@@ -38,15 +39,14 @@ class CartPoleModel(SimulatorSession):
         initial_pole_angle: float = 0,
         target_pole_position: float = 0,
     ):
-
         # cart position (m)
-        self._cart_position = 0
+        self._cart_position = initial_cart_position
 
         # cart velocity (m/s)
         self._cart_velocity = 0
 
         # cart angle (rad)
-        self._pole_angle = 0
+        self._pole_angle = initial_pole_angle
 
         # pole angular velocity (rad/s)
         self._pole_angular_velocity = 0
@@ -58,7 +58,7 @@ class CartPoleModel(SimulatorSession):
         self._pole_center_velocity = 0
 
         # target pole position (m)
-        self._target_pole_position = 0
+        self._target_pole_position = target_pole_position
 
     def step(self, command: float):
         # We are expecting the input command to be -1 or 1,
@@ -100,8 +100,8 @@ class CartPoleModel(SimulatorSession):
         )
 
     def halted(self):
-        # If the pole has fallen, there's no use in continuing.
-        return abs(self._pole_angle) >= math.pi / 2
+        # If the pole has fallen past 45 degrees, there's no use in continuing.
+        return abs(self._pole_angle) >= math.pi / 4
 
     def state(self):
         return {
@@ -122,7 +122,15 @@ class CartPoleModel(SimulatorSession):
         interface_file_path = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "cartpole_interface.json"
         )
-        return SimulatorInterface(self.get_simulator_context(), interface_file_path)
+        with open(interface_file_path, "r") as file:
+            json_interface = file.read()
+        interface = json.loads(json_interface)
+        return SimulatorInterface(
+            name=interface["name"],
+            timeout=interface["timeout"],
+            simulator_context=self.get_simulator_context(),
+            description=interface["description"],
+        )
 
     def episode_start(self, config: Schema):
         self.reset(
@@ -136,7 +144,7 @@ class CartPoleModel(SimulatorSession):
 
 
 if __name__ == "__main__":
-    config = ServiceConfig(argv=sys.argv)
+    config = BonsaiClientConfig(argv=sys.argv)
     cartpole = CartPoleModel(config)
     cartpole.reset()
     while cartpole.run():
