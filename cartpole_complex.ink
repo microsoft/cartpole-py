@@ -13,17 +13,14 @@ const TrackLength = 0.8
 const MaxPoleAngle = (12 * 2 * Math.Pi) / 360
 
 # How close to the target (in meters) must the cart be to be
-# considered succeessful?
+# considered successful?
 const CloseEnough = 0.004
-
-# URL of custom visualizer for simulator state
-const SimulatorVisualizer = "/cartpoleviz/"
 
 # Define a type that represents the per-iteration state
 # returned by the simulator.
 type SimState {
     # Position of cart in meters
-    cart_position: number<-TrackLength / 2 .. TrackLength / 2>,
+    cart_position: number,
 
     # Velocity of cart in x direction in meters/sec
     cart_velocity: number,
@@ -35,14 +32,14 @@ type SimState {
     pole_angular_velocity: number,
 
     # X position of center of pole in meters
-    pole_center_position: number<-TrackLength / 2 .. TrackLength / 2>,
+    pole_center_position: number,
 
     # X velocity of center of pole in meters/sec
     pole_center_velocity: number,
 
     # Target pole position in meters; does not
     # change throughout a single episode
-    target_pole_position: number<-TrackLength / 2 .. TrackLength / 2>,
+    target_pole_position: number,
 }
 
 # Define a type that represents the per-iteration state
@@ -51,7 +48,7 @@ type SimState {
 # provided by the simulator.
 type ObservableState {
     # Position of cart in meters
-    cart_position: number<-TrackLength / 2 .. TrackLength / 2>,
+    cart_position: number,
 
     # Velocity of cart in x direction in meters/sec
     cart_velocity: number,
@@ -64,7 +61,7 @@ type ObservableState {
 
     # Target pole position in meters; does not
     # change throughout a single episode
-    target_pole_position: number<-TrackLength / 2 .. TrackLength / 2>,
+    target_pole_position: number,
 }
 
 # Define a type that represents the per-iteration action
@@ -141,3 +138,7 @@ graph (input: ObservableState): SimAction {
         }
     }
 }
+
+# Special string to hook up the simulator visualizer
+# in the web interface.
+const SimulatorVisualizer = "/cartpoleviz/"
