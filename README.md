@@ -12,7 +12,7 @@ you are logged in to the platform.
 There is also an optional `SIM_API_HOST` key, but if it is not set it will default to `https://api.bons.ai`.
 
 If you're launching your simulator from the command line, make sure that you have these two
-environment variables set. If you like, you could use the following example script:
+environment variables set. If you like, you could use the following example Bash script:
 
 ```sh
 export SIM_WORKSPACE=<your-workspace-id>
