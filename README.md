@@ -1,4 +1,8 @@
-# Intro
+# cartpole-py
+
+A simple Python example that creates a training simulator for Bonsai. This example implements a [cartpole](https://en.wiktionary.org/wiki/cartpole) balancing environment.
+
+## Prerequisites
 
 Simulators need two environment variables set to be able to attach to the platform.
 
