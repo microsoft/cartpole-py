@@ -21,7 +21,6 @@ environment variables set. If you like, you could use the following example Bash
 ```sh
 export SIM_WORKSPACE=<your-workspace-id>
 export SIM_ACCESS_KEY=<your-access-key>
-python3 cartpole.py
 ```
 
 You will need to install support libraries prior to running. Our demos depend on `bonsai3-py`.
@@ -30,6 +29,13 @@ This library will need to be installed from source.
 ```sh
 pip3 install -e ./bonsai3-py
 ```
+
+## Running from your local Python environment
+```sh
+python3 cartpole.py
+```
+
+When you run this, the simulator registers with your Bonsai workspace. This adds an *unmanaged* entry to the list of simulators in your workspace portal that can be used to train brains while executing the simulation in your local Python environment.
 
 ## Building Demo Dockerfile
 ```sh
@@ -40,6 +46,8 @@ docker build -t <IMAGE_NAME> -f Dockerfile ../../
 ```sh
 docker run --rm -it -e SIM_ACCESS_KEY="<ACCESS_KEY>" -e SIM_API_HOST="<TARGET>" -e SIM_WORKSPACE="<WORKSPACE>" <IMAGE_NAME>
 ```
+
+This adds an *unmanaged* entry to the list of simulators in your workspace portal that can be used to train brains while executing the simulation in your container.
 
 ## How to push to ACR
 ```sh
