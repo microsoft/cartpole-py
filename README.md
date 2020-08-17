@@ -54,7 +54,7 @@ This adds an *unmanaged* entry to the list of simulators in your workspace porta
 az login # (Is not necessary if you are already up to date or logged in recently)
 az acr login --subscription <SUBSCRIPTION_ID> --name <ACR_REGISTRY_NAME>
 docker tag <IMAGE_NAME> <ACR_REGISTRY_NAME>.azurecr.io/bonsai/<IMAGE_NAME>
-docker push <ACR_REGSITRY_NAME>.azurecr.io/bonsai/cartpole
+docker push <ACR_REGSITRY_NAME>.azurecr.io/bonsai/<IMAGE_NAME>
 ```
 
 ## Example run Dockerfile
