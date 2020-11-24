@@ -1,6 +1,6 @@
 # cartpole-py
 
-A simple Python example that creates a training simulator for Bonsai. This example implements a [cartpole](https://en.wiktionary.org/wiki/cartpole) balancing environment.
+A simple Python example that creates a training simulator for Bonsai. It simulates a [cartpole](https://en.wiktionary.org/wiki/cartpole) balancing environment. The SimulatorSession interface is implemented to demonstrate using [bonsai-common](https://github.com/microsoft/bonsai-common), a Python framework for interfacing with the Bonsai platform.
 
 ## Prerequisites
 
