@@ -1,4 +1,8 @@
-# Intro
+# cartpole-py
+
+A simple Python example that creates a training simulator for Bonsai. It simulates a [cartpole](https://en.wiktionary.org/wiki/cartpole) balancing environment. The SimulatorSession interface is implemented to demonstrate using [bonsai-common](https://github.com/microsoft/bonsai-common), a Python framework for interfacing with the Bonsai platform.
+
+## Prerequisites
 
 Simulators need two environment variables set to be able to attach to the platform.
 
@@ -12,12 +16,11 @@ you are logged in to the platform.
 There is also an optional `SIM_API_HOST` key, but if it is not set it will default to `https://api.bons.ai`.
 
 If you're launching your simulator from the command line, make sure that you have these two
-environment variables set. If you like, you could use the following example script:
+environment variables set. If you like, you could use the following example Bash script:
 
 ```sh
 export SIM_WORKSPACE=<your-workspace-id>
 export SIM_ACCESS_KEY=<your-access-key>
-python3 cartpole.py
 ```
 
 You will need to install support libraries prior to running. Our demos depend on `bonsai-common`.
@@ -27,7 +30,15 @@ This library will need to be installed from source.
 pip3 install git+https://github.com/microsoft/bonsai-common
 ```
 
-## Building Dockerfile
+
+## Running from your local Python environment
+```sh
+python3 cartpole.py
+```
+
+When you run this, the simulator registers with your Bonsai workspace. This adds an *unmanaged* entry to the list of simulators in your workspace portal that can be used to train brains while executing the simulation in your local Python environment.
+
+## Building Demo Dockerfile
 
 ```sh
 docker build -t <IMAGE_NAME> -f Dockerfile ../../
@@ -39,13 +50,15 @@ docker build -t <IMAGE_NAME> -f Dockerfile ../../
 docker run --rm -it -e SIM_ACCESS_KEY="<ACCESS_KEY>" -e SIM_API_HOST="<TARGET>" -e SIM_WORKSPACE="<WORKSPACE>" <IMAGE_NAME>
 ```
 
+This adds an *unmanaged* entry to the list of simulators in your workspace portal that can be used to train brains while executing the simulation in your container.
+
 ## How to push to ACR
 
 ```sh
 az login # (Is not necessary if you are already up to date or logged in recently)
 az acr login --subscription <SUBSCRIPTION_ID> --name <ACR_REGISTRY_NAME>
 docker tag <IMAGE_NAME> <ACR_REGISTRY_NAME>.azurecr.io/bonsai/<IMAGE_NAME>
-docker push <ACR_REGSITRY_NAME>.azurecr.io/bonsai/cartpole
+docker push <ACR_REGSITRY_NAME>.azurecr.io/bonsai/<IMAGE_NAME>
 ```
 
 ## Example run Dockerfile
